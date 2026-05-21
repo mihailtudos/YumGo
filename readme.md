@@ -19,3 +19,19 @@ Component tests: most of the test pyramid is component tests. We call one HTTP e
 Read models: when the data model we read doesn't match any existing model, we write a specialized SQL query and map the result straight to the HTTP response. We don't use the app layer because reads are just data retrieval, not business logic. See more: the first read model for the basics, and ordering and filtering on a read model for more complex use cases.
 
 Inter-module communication: cross-module calls are Go function calls, with no network or serialization. Each module exports a small "contract" interface that defines what other modules can call. The rest is used only within the same module. See more: calling another module.
+YumRun, handles restaurant onboarding, customers placing orders, and courier delivery flow. This is a modular monolith. The idea is to start with a single deployable unit where modules communicate within the process, rather than splitting into microservices from day one.
+
+Architecturally, a well-structured modular monolith and microservices look the same: isolated modules with clear boundaries. The only difference is the network boundary and independent deployment.
+
+In early phases, domain boundaries change a lot as the domain grows and we learn more about the problem. Splitting into microservices too early locks into boundaries that re not fully understood yet, and moving code between services is far more expensive than moving it between modules.
+
+The core concept of the scaffolding is the `Module` interface in `common/module/module.go`. Every module in the project implements four methods: Name, Init, RegisterHttp, and RegisterContracts.
+
+The initialization sequence in backend/svc.go runs them in a specific order:
+
+1. Init for each module (creates handlers, services, repositories)
+2. RegisterContracts for each module (registers module contracts)
+3. Verify on the contracts registry (checks all expected implementations are registered)
+4. RegisterHttp for each module (sets up HTTP routes)
+
+**The order matters**. Module contracts must be fully registered before HTTP routes are set up, because HTTP handlers may call other modules via module contracts.
