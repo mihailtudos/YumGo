@@ -3,6 +3,7 @@ package http
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/mihailtudos/yumgo/common"
 )
 
@@ -13,5 +14,12 @@ func NewHandler() Handler {
 }
 
 func Register(ctx context.Context, e common.EchoRouter, handler Handler) error {
+	RegisterHandlers(e, NewStrictHandler(handler, nil))
 	return nil
+}
+
+func (h Handler) RegisterCustomer(ctx context.Context, request RegisterCustomerRequestObject) (RegisterCustomerResponseObject, error) {
+	return RegisterCustomer201JSONResponse{
+		CustomerUuid: uuid.New(),
+	}, nil
 }
