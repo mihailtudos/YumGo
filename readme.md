@@ -35,3 +35,8 @@ The initialization sequence in backend/svc.go runs them in a specific order:
 4. RegisterHttp for each module (sets up HTTP routes)
 
 **The order matters**. Module contracts must be fully registered before HTTP routes are set up, because HTTP handlers may call other modules via module contracts.
+
+> [!NOTE]
+> Modules communicate through typed Go interfaces called module contracts. This enforces module boundaries within the process, without network overhead. If one module needs something from another, it calls a method on a contract interface, not a raw function.
+
+With microservices, the network is the boundary, and you're only able to call the service's public API methods. In a modular monolith, we enforce it with code structure.

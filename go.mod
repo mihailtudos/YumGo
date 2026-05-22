@@ -3,11 +3,14 @@ module github.com/mihailtudos/yumgo
 go 1.26.2
 
 require (
+	github.com/ThreeDotsLabs/humanslog v0.1.0
 	github.com/jackc/pgx/v5 v5.9.2
 	github.com/labstack/echo/v4 v4.15.2
+	github.com/lithammer/shortuuid/v3 v3.0.7
 )
 
 require (
+	github.com/google/uuid v1.2.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
