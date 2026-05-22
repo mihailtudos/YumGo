@@ -47,7 +47,6 @@ func New(ctx context.Context, dbPgx *pgxpool.Pool) (Svc, error) {
 
 	for _, module := range modules {
 		err := module.RegisterHTTP(ctx, e)
-
 		if err != nil {
 			return Svc{}, fmt.Errorf("registering http for module %s failed: %w", module.Name(), err)
 		}
